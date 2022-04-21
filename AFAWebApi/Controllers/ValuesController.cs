@@ -10,40 +10,41 @@ namespace AFAWebApi.Controllers
     public class ValuesController : ControllerBase
     {
 
-        private GetLatestOcc? _occurance;
-
+        private readonly GetOccurrencesAFA _occurrence;
         public ValuesController()
         {
-            _occurance = new GetLatestOcc();
+            _occurrence = new GetOccurrencesAFA();
         }
 
-        // GET: api/<ValuesController>
+        // GET: api/<ValuesController>/GetLatestOccResp
         [HttpGet]
         [ActionName("GetLatestOccResp")]
         public ActionResult GetLatestOccResp()
         {
-            //GetLatestOcc test = new GetLatestOcc();
-            var res = _occurance?.LatestOccResponse();
+            
+            var res = _occurrence.LatestOccResponse();
 
-            return Ok(res?.Result);
-
+            return Ok(res.Result);
+            
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet (Name = "GetOccCount")]
+        // GET api/<ValuesController>/GetOccCount
+        [HttpGet]
         [ActionName("GetOccCount")]
         public ActionResult GetOccCountByOrgUnitResp()
         {
-            var res = _occurance?.OccCountByOrgUnitResp();
+            var res = _occurrence.OccCountByOrgUnitResp();
 
             return Ok(res?.Result);
         }
 
+
+        
+        /*
+
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
@@ -56,5 +57,7 @@ namespace AFAWebApi.Controllers
         public void Delete(int id)
         {
         }
+        */
+
     }
 }

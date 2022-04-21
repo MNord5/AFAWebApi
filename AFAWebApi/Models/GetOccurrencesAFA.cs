@@ -1,27 +1,31 @@
 ﻿namespace AFAWebApi.Models
 {
-    public class GetLatestOcc
+    public class GetOccurrencesAFA
     {
-        //public IaService.GetLatestOccurrenceRequest reqLatest;
-       
-        public GetLatestOcc ()
+        ApiUser user;
+        public GetOccurrencesAFA ()
         {
-            
+            user = new ApiUser ();
         }
 
-        public Task<IaService.GetOccurrenceCountByOrganizationalUnitResponse> OccCountByOrgUnitResp()
+     
+
+        public Task<IaService.GetOccurrenceCountByOrganizationalUnitResponse> OccCountByOrgUnitResp( string unitName ="")
         {
             IaService.GetOccurrenceCountByOrganizationalUnitRequest reqstCount = new IaService.GetOccurrenceCountByOrganizationalUnitRequest();
 
             reqstCount.User = new IaService.User();
-            reqstCount.User.Name = "timobr2";
-            reqstCount.User.PassWord = "Julmust2019";
+            reqstCount.User.Name = user.Name;
+            reqstCount.User.PassWord = user.Password;
+            reqstCount.IncludeLight = true;
+            if (unitName != "")
+                reqstCount.OrganizationalUnitType = IaService.OrganizationalUnitType.Employment;
             reqstCount.PeriodStart = DateTime.Now.AddYears(-1).ToShortDateString();
             reqstCount.PeriodEnd = DateTime.Now.ToShortDateString();
             reqstCount.PeriodType = IaService.DatePeriodType.Occurrence;
             reqstCount.IncludeSubUnits = true;
             reqstCount.IncludeContractors = true;
-            reqstCount.OrganizationalUnitName = "";
+            reqstCount.OrganizationalUnitName = unitName;
 
             IaService.IaIntegrationSiClient siClient = new IaService.IaIntegrationSiClient();
             var resultCount = siClient.GetOccurrenceCountByOrganizationalUnitAsync(reqstCount);
@@ -39,17 +43,17 @@
 
 
             reqLatest.User = new IaService.User();
-            reqLatest.User.Name = "timobr2";
-            reqLatest.User.PassWord = "Julmust2019";
+            reqLatest.User.Name = user.Name;
+            reqLatest.User.PassWord = user.Password;
             reqLatest.OrganizationalUnitName = "";
 
             IaService.IaIntegrationSiClient siClient = new IaService.IaIntegrationSiClient();
             var res = siClient.GetLatestOccurrenceAsync(reqLatest);
-
+            //var test = res.Result;
+            
             return res;
         }
-        
-        
+
 
     }
 }
